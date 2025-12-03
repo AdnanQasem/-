@@ -1,0 +1,268 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}إضافة مشروع جديد - سهمي{% endblock %}
+
+{% block content %}
+
+<style>
+    .add-project-section{
+        padding: 90px 0;
+        background: radial-gradient(circle at top, #e3f8ff 0, #f5f7fb 40%, #f9fafb 100%);
+    }
+
+    .add-project-card{
+        max-width: 900px;
+        margin: 0 auto;
+        background: #ffffff;
+        border-radius: 24px;
+        box-shadow: 0 20px 60px rgba(15, 23, 42, 0.18);
+        overflow: hidden;
+        border: 1px solid rgba(226,232,240,0.9);
+    }
+
+    .add-project-header{
+        padding: 28px 35px 20px;
+        background: linear-gradient(135deg,#0d6efd,#00b894);
+        color:#fff;
+        display:flex;
+        align-items:center;
+        gap:18px;
+    }
+
+    .add-project-icon{
+        width:52px;
+        height:52px;
+        border-radius:18px;
+        background: rgba(255,255,255,0.12);
+        display:flex;
+        align-items:center;
+        justify-content:center;
+        font-size:1.7rem;
+        box-shadow:0 10px 25px rgba(0,0,0,0.15);
+    }
+
+    .add-project-header h1{
+        font-size:1.8rem;
+        margin:0 0 5px;
+        font-weight:800;
+    }
+
+    .add-project-header p{
+        margin:0;
+        font-size:0.98rem;
+        opacity:0.9;
+    }
+
+    .add-project-body{
+        padding: 30px 35px 32px;
+    }
+
+    .add-project-form-row{
+        display:grid;
+        grid-template-columns: repeat(auto-fit,minmax(240px,1fr));
+        gap:20px 25px;
+        margin-bottom:15px;
+    }
+
+    .add-project-form-group{
+        display:flex;
+        flex-direction:column;
+        gap:6px;
+    }
+
+    .add-project-form-group label{
+        font-size:0.95rem;
+        font-weight:700;
+        color:#1f2933;
+    }
+
+    .add-project-form-group small{
+        font-size:0.8rem;
+        color:#9a9aa5;
+    }
+
+    .add-project-input,
+    .add-project-textarea,
+    .add-project-file{
+        padding:11px 14px;
+        border-radius:12px;
+        border:1px solid #d0d7e2;
+        background:#f9fafb;
+        font-size:0.96rem;
+        outline:none;
+        transition:all 0.2s ease;
+    }
+
+    .add-project-textarea{
+        min-height:140px;
+        resize:vertical;
+    }
+
+    .add-project-input:focus,
+    .add-project-textarea:focus,
+    .add-project-file:focus{
+        border-color:#0d6efd;
+        background:#ffffff;
+        box-shadow:0 0 0 3px rgba(13,110,253,0.12);
+    }
+
+    .add-project-file{
+        padding-top:10px;
+    }
+
+    .add-project-hint{
+        font-size:0.82rem;
+        color:#9a9aa5;
+        margin-top:2px;
+    }
+
+    .add-project-warning{
+        margin-top:22px;
+        background:linear-gradient(135deg,#fff7e6,#ffe8c2);
+        border-right:5px solid #f59e0b;
+        padding:14px 16px;
+        border-radius:16px;
+        font-size:0.9rem;
+        color:#7a5500;
+        display:flex;
+        gap:10px;
+        align-items:flex-start;
+    }
+
+    .add-project-warning-icon{
+        width:28px;
+        height:28px;
+        border-radius:10px;
+        background:#f59e0b;
+        display:flex;
+        align-items:center;
+        justify-content:center;
+        color:#fff;
+        font-size:1rem;
+        flex-shrink:0;
+    }
+
+    .add-project-submit{
+        margin-top:28px;
+    }
+
+    .add-project-submit button{
+        width:100%;
+        padding:14px 0;
+        border:none;
+        border-radius:999px;
+        background:linear-gradient(135deg,#0acf80,#00b894);
+        color:#fff;
+        font-size:1.1rem;
+        font-weight:800;
+        letter-spacing:0.5px;
+        cursor:pointer;
+        box-shadow:0 18px 35px rgba(10,207,128,0.45);
+        transition:all 0.2s ease;
+    }
+
+    .add-project-submit button:hover{
+        transform:translateY(-2px);
+        box-shadow:0 24px 40px rgba(10,207,128,0.55);
+    }
+
+    .add-project-submit button:active{
+        transform:translateY(0);
+        box-shadow:0 10px 20px rgba(10,207,128,0.4);
+    }
+
+    .add-project-footer-note{
+        margin-top:14px;
+        text-align:center;
+        font-size:0.85rem;
+        color:#9a9aa5;
+    }
+
+    @media (max-width:768px){
+        .add-project-card{
+            margin:0 15px;
+        }
+        .add-project-header{
+            padding:20px 20px 16px;
+        }
+        .add-project-body{
+            padding:22px 20px 24px;
+        }
+    }
+</style>
+
+<section class="add-project-section">
+    <div class="add-project-card">
+        <!-- الهيدر -->
+        <div class="add-project-header">
+            <div class="add-project-icon">
+                <i class="fas fa-lightbulb"></i>
+            </div>
+            <div>
+                <h1>أضف مشروعك الاستثماري</h1>
+                <p>قدّم فكرتك، حدد احتياجك المالي، ودع المستثمرين يكتشفون مشروعك عبر منصة سهمي.</p>
+            </div>
+        </div>
+
+        <!-- جسم الصفحة / الفورم -->
+        <div class="add-project-body">
+            <form method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+
+                <!-- الصف الأول -->
+                <div class="add-project-form-row">
+                    <div class="add-project-form-group">
+                        <label for="id_title">عنوان المشروع</label>
+                        <input id="id_title" type="text" name="title" class="add-project-input" placeholder="مثال: مخبز الأمل - إنتاج المخبوزات والمعجنات" required>
+                        <small class="add-project-hint">اختر عنوانًا واضحًا ومختصرًا يعبر عن فكرة المشروع.</small>
+                    </div>
+
+                    <div class="add-project-form-group">
+                        <label for="id_goal_amount">المبلغ المطلوب (₪)</label>
+                        <input id="id_goal_amount" type="number" name="goal_amount" class="add-project-input" min="1000" step="100" placeholder="مثال: 50000" required>
+                        <small class="add-project-hint">حدد إجمالي رأس المال الذي تحتاجه لبدء أو توسيع المشروع.</small>
+                    </div>
+                </div>
+
+                <!-- الوصف -->
+                <div class="add-project-form-group" style="margin-top:10px;">
+                    <label for="id_description">وصف المشروع</label>
+                    <textarea id="id_description" name="description" class="add-project-textarea" rows="5" placeholder="اشرح فكرة مشروعك، أهدافه، الفئة المستهدفة، وكيف سيتم استخدام التمويل..." required></textarea>
+                    <small class="add-project-hint">كلما كان الوصف أوضح وأكثر تنظيمًا، زادت فرصة جذب المستثمرين.</small>
+                </div>
+
+                <!-- صورة المشروع -->
+                <div class="add-project-form-group" style="margin-top:15px;">
+                    <label for="id_image">صورة المشروع (اختياري)</label>
+                    <input id="id_image" type="file" name="image" class="add-project-file" accept="image/*">
+                    <small class="add-project-hint">يفضل رفع صورة معبرة عن المشروع (شعار، منتج، مكان العمل...)</small>
+                </div>
+
+                <!-- تحذير استثماري بسيط -->
+                <div class="add-project-warning">
+                    <div class="add-project-warning-icon">
+                        <i class="fas fa-exclamation"></i>
+                    </div>
+                    <div>
+                        الاستثمار في المشاريع ينطوي على مخاطر، وقد لا يتم جمع كامل المبلغ أو تحقيق الأرباح المتوقعة.  
+                        تأكد من كتابة معلومات دقيقة وواضحة عن مشروعك لزيادة ثقة المستثمرين.
+                    </div>
+                </div>
+
+                <!-- زر الإرسال -->
+                <div class="add-project-submit">
+                    <button type="submit">
+                        إرسال المشروع للمراجعة
+                    </button>
+                </div>
+
+                <div class="add-project-footer-note">
+                    بعد إرسال النموذج، سيقوم فريق سهمي بمراجعة مشروعك قبل نشره للمستثمرين.
+                </div>
+            </form>
+        </div>
+    </div>
+</section>
+
+{% endblock %}

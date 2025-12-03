@@ -1,0 +1,386 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}جميع المشاريع - سهمك{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<style>
+    :root {
+        --blue: #0d6efd;
+        --blue-dark: #1d4ed8;
+        --green: #22c55e;
+        --light-bg: #f5f7fb;
+        --card-border: #e5e7eb;
+        --text-main: #0f172a;
+        --text-muted: #6b7280;
+    }
+
+    body {
+        background: var(--light-bg);
+    }
+
+    /* عنوان الصفحة */
+    .page-header {
+        text-align: center;
+        padding: 130px 20px 80px;
+        background: linear-gradient(135deg, #f5f7fb 0%, #eef3ff 100%);
+        color: var(--text-main);
+        margin-bottom: 40px;
+        border-bottom: 1px solid rgba(226,232,240,0.8);
+    }
+    .page-header h1 {
+        font-size: 3rem;
+        font-weight: 900;
+        margin-bottom: 18px;
+    }
+    .page-header p {
+        font-size: 1.15rem;
+        opacity: 0.9;
+        max-width: 720px;
+        margin: 0 auto;
+        color: #4b5563;
+    }
+
+    /* فلتر + بحث */
+    .filters {
+        max-width: 1100px;
+        margin: 0 auto 35px;
+        padding: 0 16px;
+        display: flex;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 16px;
+    }
+    .search-box {
+        flex: 1;
+        min-width: 260px;
+    }
+    .search-box input {
+        width: 100%;
+        padding: 14px 18px;
+        border-radius: 999px;
+        font-size: 1rem;
+        border: 1px solid var(--card-border);
+        outline: none;
+        background: #ffffff;
+        transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+    }
+    .search-box input:focus {
+        border-color: var(--blue);
+        box-shadow: 0 0 0 3px rgba(37,99,235,0.15);
+        background: #ffffff;
+    }
+
+    .filter-select {
+        padding: 14px 22px;
+        border-radius: 999px;
+        background: #ffffff;
+        font-size: 0.98rem;
+        border: 1px solid var(--card-border);
+        cursor: pointer;
+        min-width: 200px;
+        outline: none;
+        transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+    .filter-select:focus {
+        border-color: var(--blue);
+        box-shadow: 0 0 0 3px rgba(37,99,235,0.15);
+    }
+
+    /* كروت المشاريع */
+    .projects-grid {
+        max-width: 1100px;
+        margin: 0 auto 60px;
+        padding: 0 16px;
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+        gap: 24px;
+    }
+    .project-card {
+        background: #ffffff;
+        border-radius: 24px;
+        overflow: hidden;
+        border: 1px solid var(--card-border);
+        box-shadow: 0 14px 35px rgba(15,23,42,0.08);
+        transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+        position: relative;
+    }
+    .project-card:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 22px 55px rgba(15,23,42,0.12);
+        border-color: rgba(37,99,235,0.2);
+    }
+
+    .project-image {
+        height: 210px;
+        background: linear-gradient(135deg, #0d6efd, #22c55e);
+        position: relative;
+        overflow: hidden;
+    }
+    .project-image img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.4s ease;
+    }
+    .project-card:hover .project-image img {
+        transform: scale(1.06);
+    }
+    .project-image .placeholder {
+        position: absolute;
+        top: 50%; 
+        left: 50%;
+        transform: translate(-50%, -50%);
+        font-size: 3rem;
+        color: #ffffff;
+        font-weight: 800;
+        letter-spacing: 3px;
+    }
+
+    .project-info {
+        padding: 22px 22px 24px;
+    }
+    .project-info h3 {
+        font-size: 1.25rem;
+        margin: 0 0 8px;
+        color: var(--text-main);
+        line-height: 1.5;
+    }
+    .owner {
+        color: var(--blue-dark);
+        font-weight: 600;
+        font-size: 0.92rem;
+        margin-bottom: 10px;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+    }
+    .owner::before {
+        content: "\f007";
+        font-family: "Font Awesome 6 Free";
+        font-weight: 900;
+        font-size: 0.84rem;
+    }
+    .project-info p {
+        color: #4b5563;
+        line-height: 1.7;
+        margin-bottom: 18px;
+        font-size: 0.96rem;
+    }
+
+    .meta-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 12px;
+        font-size: 0.9rem;
+        color: var(--text-muted);
+    }
+
+    .progress-section {
+        margin: 14px 0 4px;
+    }
+    .progress-bar {
+        height: 8px;
+        background: #e5e7eb;
+        border-radius: 999px;
+        overflow: hidden;
+        margin-bottom: 8px;
+    }
+    .progress-fill {
+        height: 100%;
+        background: linear-gradient(90deg, #22c55e, #0d6efd);
+        width: 0;
+        border-radius: 999px;
+        transition: width 1.2s ease;
+    }
+    .progress-text {
+        display: flex;
+        justify-content: space-between;
+        font-weight: 600;
+        color: #374151;
+        font-size: 0.9rem;
+    }
+    .progress-text .percentage {
+        color: var(--green);
+        font-size: 1rem;
+    }
+
+    .invest-btn {
+        display: block;
+        text-align: center;
+        padding: 12px 0;
+        background: linear-gradient(135deg, #0d6efd, #1d4ed8);
+        color: #ffffff;
+        border-radius: 999px;
+        font-weight: 700;
+        font-size: 0.98rem;
+        text-decoration: none;
+        transition: transform 0.25s ease, box-shadow 0.25s ease, filter 0.25s ease;
+        margin-top: 18px;
+        box-shadow: 0 12px 25px rgba(37,99,235,0.35);
+    }
+    .invest-btn:hover {
+        transform: translateY(-3px);
+        filter: brightness(1.03);
+        box-shadow: 0 18px 35px rgba(37,99,235,0.45);
+    }
+
+    /* إذا ما في مشاريع */
+    .no-projects {
+        text-align: center;
+        padding: 100px 20px 120px;
+        color: #4b5563;
+        font-size: 1.2rem;
+        grid-column: 1 / -1;
+    }
+    .no-projects i {
+        font-size: 3.5rem;
+        color: #d1d5db;
+        margin-bottom: 16px;
+    }
+    .no-projects h3 {
+        margin-bottom: 8px;
+        font-size: 1.4rem;
+        color: var(--text-main);
+    }
+    .no-projects p {
+        font-size: 1rem;
+        color: var(--text-muted);
+    }
+
+    @media (max-width: 768px) {
+        .page-header {
+            padding-top: 120px;
+            padding-bottom: 60px;
+        }
+        .page-header h1 { 
+            font-size: 2.2rem; 
+        }
+        .page-header p { 
+            font-size: 1rem; 
+        }
+        .filters { 
+            flex-direction: column; 
+        }
+        .projects-grid { 
+            grid-template-columns: 1fr; 
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+
+<!-- عنوان الصفحة -->
+<div class="page-header">
+    <h1>جميع المشاريع المتاحة للاستثمار</h1>
+    <p>اكتشف فرص استثمارية حقيقية تدعم اقتصاد فلسطين وتحقق لك عائدًا مجديًا بإذن الله</p>
+</div>
+
+<!-- فلتر وبحث -->
+<div class="filters">
+    <div class="search-box">
+        <input type="text" placeholder="ابحث عن مشروع..." onkeyup="filterProjects(this.value)">
+    </div>
+    <select class="filter-select" onchange="sortProjects(this.value)">
+        <option value="newest">الأحدث أولاً</option>
+        <option value="most-funded">الأكثر تمويلًا</option>
+        <option value="ending-soon">ينتهي قريبًا</option>
+    </select>
+</div>
+
+<!-- كروت المشاريع -->
+<div class="projects-grid" id="projectsGrid">
+    {% for project in projects %}
+    <div class="project-card"
+         data-progress="{{ project.progress|default:0 }}"
+         data-goal="{{ project.goal_amount|default:0 }}"
+         data-created="{{ project.created_at|date:'U' }}">
+        <div class="project-image">
+            {% if project.image %}
+                <img src="{{ project.image.url }}" alt="{{ project.title }}">
+            {% else %}
+                <div class="placeholder">{{ project.title|slice:":2"|upper }}</div>
+            {% endif %}
+        </div>
+        <div class="project-info">
+            <h3>{{ project.title }}</h3>
+            <span class="owner">بواسطة: {{ project.owner.username }}</span>
+            <p>{{ project.description|truncatewords:20 }}</p>
+
+            <div class="meta-row">
+                <span>الهدف: {{ project.goal_amount }} ₪</span>
+                <span>تم جمع: {{ project.raised_amount }} ₪</span>
+            </div>
+
+            <div class="progress-section">
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width: {{ project.progress }}%"></div>
+                </div>
+                <div class="progress-text">
+                    <span>{{ project.raised_amount }} ₪ من {{ project.goal_amount }} ₪</span>
+                    <span class="percentage">{{ project.progress|floatformat:0 }}%</span>
+                </div>
+            </div>
+
+            <a href="{% url 'projects:detail' project.id %}" class="invest-btn">
+                استعرض التفاصيل واستثمر
+            </a>
+        </div>
+    </div>
+    {% empty %}
+    <div class="no-projects">
+        <i class="fas fa-search"></i>
+        <h3>لا توجد مشاريع متاحة حاليًا</h3>
+        <p>كن أول من يطلق مشروعًا على سهمك!</p>
+    </div>
+    {% endfor %}
+</div>
+
+<script>
+// البحث البسيط
+function filterProjects(query) {
+    const cards = document.querySelectorAll('.project-card');
+    const q = query.toLowerCase();
+    cards.forEach(card => {
+        const title = card.querySelector('h3').textContent.toLowerCase();
+        const desc = card.querySelector('p').textContent.toLowerCase();
+        card.style.display = (title.includes(q) || desc.includes(q)) ? 'block' : 'none';
+    });
+}
+
+// ترتيب المشاريع
+function sortProjects(type) {
+    const grid = document.getElementById('projectsGrid');
+    const cardsArray = Array.from(grid.querySelectorAll('.project-card'));
+
+    let sorted;
+    if (type === 'most-funded') {
+        sorted = cardsArray.sort((a, b) => {
+            const ap = parseFloat(a.dataset.progress || 0);
+            const bp = parseFloat(b.dataset.progress || 0);
+            return bp - ap;
+        });
+    } else if (type === 'ending-soon') {
+        // مؤقتًا نرتب حسب الأقدم إنشاءً
+        sorted = cardsArray.sort((a, b) => {
+            const ac = parseInt(a.dataset.created || 0);
+            const bc = parseInt(b.dataset.created || 0);
+            return ac - bc;
+        });
+    } else {
+        // الأحدث أولاً
+        sorted = cardsArray.sort((a, b) => {
+            const ac = parseInt(a.dataset.created || 0);
+            const bc = parseInt(b.dataset.created || 0);
+            return bc - ac;
+        });
+    }
+
+    sorted.forEach(card => grid.appendChild(card));
+}
+</script>
+
+{% endblock %}

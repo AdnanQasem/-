@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% block title %}لوحة تحكم المشرف{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+  <h2 class="text-danger mb-5">لوحة تحكم المشرف - سهمي</h2>
+
+  <div class="row g-4">
+    <div class="col-md-3">
+      <div class="card text-white bg-primary shadow-lg">
+        <div class="card-body text-center">
+          <h1 class="display-4">{{ total_users }}</h1>
+          <p class="fs-5">إجمالي المستخدمين</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-3">
+      <div class="card text-white bg-success shadow-lg">
+        <div class="card-body text-center">
+          <h1 class="display-4">{{ total_projects }}</h1>
+          <p class="fs-5">إجمالي المشاريع</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-3">
+      <div class="card text-white bg-warning shadow-lg">
+        <div class="card-body text-center">
+          <h1 class="display-4">{{ pending_projects }}</h1>
+          <p class="fs-5">مشاريع في الانتظار</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-3">
+      <div class="card text-white bg-info shadow-lg">
+        <div class="card-body text-center">
+          <h1 class="display-4">{{ total_investments }}</h1>
+          <p class="fs-5">إجمالي الاستثمارات</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="mt-5">
+    <a href="{% url 'admin:index' %}" class="btn btn-dark btn-lg">الذهاب إلى لوحة الإدارة</a>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}إتمام الاستثمار - سهمك{% endblock %}
+
+{% block content %}
+<section style="padding:120px 0; background:#f8f9fa; min-height:100vh;">
+    <div class="container">
+        <div style="max-width:600px; margin:auto; background:white; border-radius:20px; overflow:hidden; box-shadow:0 15px 50px rgba(0,0,0,0.1);">
+            <div style="background:linear-gradient(135deg,#0d6efd,#0acf80); color:white; padding:40px 30px; text-align:center;">
+                <h1 style="font-size:2.8rem; margin-bottom:15px;">إتمام الاستثمار</h1>
+                <p style="font-size:1.4rem; opacity:0.9;">اختر طريقة الدفع المناسبة لك</p>
+            </div>
+
+            <div style="padding:40px;">
+                <h2 style="text-align:center; margin-bottom:30px; color:#0d6efd;">المبلغ المطلوب: <strong>500 ₪</strong></h2>
+
+                <div style="display:grid; gap:20px;">
+                    <!-- تحويل بنكي / جوال باي -->
+                    <a href="https://wa.me/972595277594?text=مرحبا%20أريد%20الاستثمار%20في%20مشروع%20{{ project.title|urlencode }}%20بمبلغ%20500%20شيكل" 
+                       target="_blank" 
+                       style="background:#25d366; color:white; padding:20px; border-radius:15px; text-align:center; font-size:1.3rem; font-weight:bold; text-decoration:none; display:flex; align-items:center; justify-content:center; gap:15px;">
+                        <i class="fab fa-whatsapp fa-2x"></i>
+                        استثمرعبرواتساب  (تحويل بنكي:بال باي / جوال باي)
+                    </a>
+
+                    <!-- بالنقد عند الالتقاء -->
+                    <a href="https://wa.me/970595277594?text=أريد%20الاستثمار%20نقدًا%20في%20مشروع%20{{ project.title|urlencode }}" 
+                       target="_blank"
+                       style="background:#f8a31a; color:white; padding:20px; border-radius:15px; text-align:center; font-size:1.3rem; font-weight:bold; text-decoration:none; display:flex; align-items:center; justify-content:center; gap:15px;">
+                        <i class="fas fa-hand-holding-usd fa-2x"></i>
+                        استثمر نقدًا (نتقابل في  غزة)
+                    </a>
+
+                    <!-- بنك فلسطين / الإسلامي -->
+                    <div style="background:#0d6efd; color:white; padding:25px; border-radius:15px; text-align:center;">
+                        <h3>تحويل بنكي</h3>
+                        <p style="margin:15px 0; font-size:1.1rem;">بنك فلسطين   </p>
+                        <p style="background:rgba(255,255,255,0.2); padding:12px; border-radius:10px; font-weight:bold; letter-spacing:1px;">
+                            IBAN: PS12 PALS 0123 4567 8901 2345 6789
+                        </p>
+                        <p style="margin-top:10px; font-size:0.9rem; opacity:0.9;">
+                            اكتب في الملاحظات: استثمار - {{ project.title }}
+                        </p>
+                    </div>
+                </div>
+
+                <div style="margin-top:40px; text-align:center;">
+                    <p style="color:#666;">
+                        بعد الدفع تواصل معنا على الواتساب وسنجعل استثمارك رسمي خلال 24 ساعة
+                    </p>
+                    <a href="{% url 'projects:detail' project.id %}" style="color:#0d6efd; font-weight:bold;">العودة للمشروع</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

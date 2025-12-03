@@ -1,0 +1,128 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}تعديل الملف الشخصي - سهمي{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<style>
+    :root { --main:#006f5c; --accent:#00a884; }
+
+    .edit-page {
+        min-height: 100vh;
+        background: linear-gradient(135deg, var(--main) 0%, var(--accent) 100%);
+        padding: 120px 20px 100px;
+    }
+    .edit-card {
+        max-width: 700px;
+        margin: 0 auto;
+        background: white;
+        border-radius: 32px;
+        padding: 50px;
+        box-shadow: 0 30px 80px rgba(0,0,0,0.25);
+    }
+    .edit-card h1 {
+        text-align: center;
+        color: var(--main);
+        font-size: 2.8rem;
+        margin-bottom: 40px;
+        font-weight: 900;
+    }
+    .form-group {
+        margin-bottom: 25px;
+    }
+    .form-group label {
+        display: block;
+        font-weight: bold;
+        color: var(--main);
+        margin-bottom: 10px;
+        font-size: 1.2rem;
+    }
+    .form-group input,
+    .form-group textarea {
+        width: 100%;
+        padding: 16px 20px;
+        border: 2px solid #ddd;
+        border-radius: 16px;
+        font-size: 1.1rem;
+        transition: 0.3s;
+    }
+    .form-group input:focus,
+    .form-group textarea:focus {
+        border-color: var(--accent);
+        outline: none;
+        box-shadow: 0 0 0 4px rgba(0,168,132,0.2);
+    }
+    .form-group textarea { min-height: 120px; resize: vertical; }
+    .btn-save {
+        width: 100%;
+        padding: 18px;
+        background: center;
+        background: linear-gradient(135deg, var(--main), var(--accent));
+        color: white;
+        border: none;
+        border-radius: 50px;
+        font-size: 1.4rem;
+        font-weight: bold;
+        cursor: pointer;
+        transition: 0.4s;
+    }
+    .btn-save:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 20px 40px rgba(0,111,92,0.4);
+    }
+    .back {
+        display: block;
+        text-align: center;
+        margin-top: 25px;
+        color: var(--main);
+        font-weight: bold;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="edit-page">
+    <div class="edit-card">
+        <h1>تعديل الملف الشخصي</h1>
+
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+
+
+            <div class="form-group">
+                <label>رقم الجوال</label>
+                {{ form.phone }}
+            </div>
+
+            <div class="form-group">
+                <label>المدينة</label>
+                {{ form.city }}
+            </div>
+
+            <div class="form-group">
+                <label>الصورة الشخصية</label>
+                {{ form.avatar }}
+                {% if user.profile.avatar %}
+                    <p style="margin-top:10px;">
+                        <img src="{{ user.profile.avatar.url }}" style="width:100px;height:100px;border-radius:50%;object-fit:cover;">
+                    </p>
+                {% endif %}
+            </div>
+
+            <div class="form-group">
+                <label>نبذة عنك (اختياري)</label>
+                {{ form.bio }}
+            </div>
+
+            <button type="submit" class="btn-save">
+                حفظ التغييرات
+            </button>
+        </form>
+
+        <a href="{% url 'accounts:profile' %}" class="back">
+            رجوع إلى الملف الشخصي
+        </a>
+    </div>
+</div>
+{% endblock %}

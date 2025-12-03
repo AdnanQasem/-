@@ -1,0 +1,253 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}لوحة تحكم صاحب المشروع - سهمي{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+<style>
+/* ---------------- ROOT COLORS ---------------- */
+:root{
+    --blue:#0d6efd;
+    --blue-light:#4d9dff;
+    --green:#0acf80;
+    --green-dark:#0ab56f;
+    --bg:#f4f6fb;
+    --text:#222;
+    --glass-bg:rgba(255,255,255,0.65);
+    --glass-border:1px solid rgba(255,255,255,0.45);
+    --soft-shadow:0 10px 40px rgba(0,0,0,0.08);
+}
+
+/* ---------------- PAGE ---------------- */
+.dashboard{
+    padding:130px 0 80px;
+    min-height:100vh;
+    background:linear-gradient(145deg,#fafdff,#eef2f7);
+    font-family:"Tajawal", sans-serif;
+}
+
+/* ---------------- HEADER ---------------- */
+.dashboard h1{
+    font-size:3.4rem;
+    font-weight:900;
+    background:linear-gradient(135deg,var(--blue),var(--blue-light));
+    -webkit-background-clip:text;
+    color:transparent;
+}
+.dashboard p{ color:#555; }
+
+/* ---------------- GRID ---------------- */
+.stats-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+    gap:30px;
+    margin-bottom:60px;
+}
+
+/* ---------------- CARD ---------------- */
+.stat-card{
+    backdrop-filter:blur(14px);
+    background:var(--glass-bg);
+    border-radius:22px;
+    padding:35px;
+    text-align:center;
+    border:var(--glass-border);
+    box-shadow:var(--soft-shadow);
+    transition:0.35s;
+}
+.stat-card:hover{
+    transform:translateY(-12px) scale(1.03);
+}
+
+/* ---------------- CARD CONTENT ---------------- */
+.stat-icon{
+    font-size:3.4rem;
+    margin-bottom:18px;
+}
+.stat-value{
+    font-size:3rem;
+    font-weight:900;
+    margin:10px 0 5px;
+}
+
+/* ---------------- TABLE ---------------- */
+.projects-table{
+    background:white;
+    border-radius:22px;
+    overflow:hidden;
+    box-shadow:var(--soft-shadow);
+}
+.table-header{
+    background:linear-gradient(135deg,var(--blue),var(--blue-light));
+    padding:28px;
+    color:white;
+    font-size:1.8rem;
+    font-weight:700;
+    text-align:center;
+}
+table{
+    width:100%;
+    border-collapse:collapse;
+}
+th{
+    padding:20px;
+    background:#fafafa;
+    color:#333;
+    font-size:1.4rem;
+    font-weight:700;
+}
+td{
+    padding:20px;
+    font-size:1.4rem;
+}
+tr:nth-child(even){ background:#fcfcfc; }
+tr:hover{
+    background:#e7f1ff;
+}
+
+/* ---------------- STATUS ---------------- */
+.status-active{ color:var(--green); font-weight:900; }
+.status-pending{ color:#f8a31a; font-weight:900; }
+.status-completed{ color:var(--blue); font-weight:900; }
+
+/* ---------------- BUTTONS ---------------- */
+.btn-add{
+    display:inline-block;
+    padding:18px 50px;
+    background:linear-gradient(135deg,var(--blue),var(--blue-light));
+    color:white;
+    border-radius:60px;
+    text-decoration:none;
+    font-weight:900;
+    font-size:1.6rem;
+    box-shadow:0 15px 35px rgba(13,110,253,0.35);
+    transition:0.3s;
+}
+.btn-add:hover{ transform:translateY(-6px) scale(1.04); }
+
+.btn-view{
+    display:inline-block;
+    padding:12px 25px;
+    background:var(--blue);
+    color:white;
+    border-radius:14px;
+    font-size:1.3rem;
+    font-weight:700;
+    text-decoration:none;
+    transition:0.3s;
+}
+.btn-view:hover{ background:#0b5ed7; transform:scale(1.05); }
+</style>
+{% endblock %}
+
+{% block content %}
+<section class="dashboard">
+    <div class="container">
+
+        <!-- TITLE -->
+        <div style="text-align:center; margin-bottom:50px;">
+            <h1>لوحة تحكم صاحب المشروع</h1>
+            <p>
+                مرحبًا <strong>{{ user.get_full_name|default:user.username }}</strong>
+            </p>
+        </div>
+
+        <!-- STATS -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-icon" style="color:var(--green);"><i class="fas fa-coins"></i></div>
+                <div class="stat-value" style="color:var(--green);">{{ total_raised|default:"0" }} ₪</div>
+                <p>إجمالي التمويل</p>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-icon" style="color:var(--blue);"><i class="fas fa-project-diagram"></i></div>
+                <div class="stat-value" style="color:var(--blue);">{{ total_projects|default:"0" }}</div>
+                <p>عدد المشاريع</p>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-icon" style="color:#f8a31a;"><i class="fas fa-users"></i></div>
+                <div class="stat-value" style="color:#f8a31a;">{{ total_investors|default:"0" }}</div>
+                <p>عدد المستثمرين</p>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-icon" style="color:var(--blue-light);"><i class="fas fa-chart-line"></i></div>
+                <div class="stat-value" style="color:var(--blue-light);">{{ avg_completion|default:"0" }}%</div>
+                <p>متوسط الإنجاز</p>
+            </div>
+        </div>
+
+        <!-- TABLE -->
+        <div class="projects-table">
+            <div class="table-header">مشاريعي على منصة سهمك</div>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>اسم المشروع</th>
+                        <th>المطلوب</th>
+                        <th>تم جمع</th>
+                        <th>النسبة</th>
+                        <th>الحالة</th>
+                        <th>الإجراء</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    {% for project in projects %}
+                    <tr>
+                        <td><strong>{{ project.title }}</strong></td>
+                        <td>{{ project.goal_amount }} ₪</td>
+
+                        <td style="color:var(--green); font-weight:bold;">
+                            {{ project.raised_amount }} ₪
+                        </td>
+
+                        <td>
+                            <div style="background:#eee; border-radius:10px; overflow:hidden; height:12px; width:120px; margin:auto;">
+                                <div style="height:100%; background:var(--green); width:{{ project.progress }}%;"></div>
+                            </div>
+                            <small>{{ project.progress }}%</small>
+                        </td>
+
+                        <td>
+                            {% if project.progress >= 100 %}
+                                <span class="status-completed">مكتمل</span>
+                            {% elif project.is_active %}
+                                <span class="status-active">نشط</span>
+                            {% else %}
+                                <span class="status-pending">معلّق</span>
+                            {% endif %}
+                        </td>
+
+                        <td>
+                            <a href="{% url 'projects:detail' project.id %}" class="btn-view">إدارة</a>
+                        </td>
+                    </tr>
+
+                    {% empty %}
+                    <tr>
+                        <td colspan="6" style="padding:70px; color:#aaa; font-size:1.4rem;">
+                            لا توجد مشاريع حتى الآن 🌿<br><br>
+                            <a href="{% url 'projects:create' %}" class="btn-add" style="font-size:1.4rem;">
+                                أضف مشروعك الأول
+                            </a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <!-- ADD BUTTON -->
+        <div style="text-align:center; margin-top:60px;">
+            <a href="{% url 'projects:create' %}" class="btn-add">أضف مشروع جديد</a>
+        </div>
+
+    </div>
+</section>
+{% endblock %}
