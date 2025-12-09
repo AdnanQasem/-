@@ -8,6 +8,13 @@ class Profile(models.Model):
         ('INVESTOR', 'Investor'),  # مستثمر
         ('OWNER', 'Owner'),        # صاحب مشروع
     )
+    
+    # 👇 حقل الصورة
+    avatar = models.ImageField(
+        upload_to='avatars/',
+        null=True,
+        blank=True
+    )
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='profile')
     role = models.CharField(max_length=10, choices=ROLE_CHOICES, default='INVESTOR')
     phone = models.CharField(max_length=20, blank=True)

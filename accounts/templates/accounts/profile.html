@@ -1,261 +1,31 @@
-{% extends "base.html" %}
 {% load static %}
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>سهمك</title>
+    <link rel="stylesheet" href="{% static 'css/profile.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/style.css' %}" />
 
-{% block title %}ملفي الشخصي - سهمي{% endblock %}
+    <!-- في كل صفحات HTML، داخل <head> -->
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%230d6efd' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><polyline points='22 7 13.5 15.5 8.5 10.5 2 17'></polyline><polyline points='16 7 22 7 22 13'></polyline></svg>">
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+      integrity="sha512-MrU29tJj6Bq6cYz3n0JVpaz6RtZpmjHtkobaN6D+PfYZ7R6pujISiFDUFxu05o2IaNbS1Ry6j3Tz7kBxKuXG3Q=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+  </head>
+  <body>
 
-{% block extra_css %}
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-<style>
-    :root {
-        --bg-page: #f3f6fc;
-        --card-bg: #ffffff;
-        --border-soft: #e1e7f5;
-        --blue: #0d6efd;
-        --blue-soft: #e4efff;
-        --text-main: #1f2933;
-        --text-muted: #6b7280;
-        --radius-lg: 22px;
-        --shadow-soft: 0 18px 45px rgba(15, 23, 42, 0.08);
-    }
+    <div class="menu">
+      <aside class="sidebar">
+        <div class="profile-section">
 
-    .profile-page {
-        padding: 130px 0 90px;
-        background: radial-gradient(circle at top left, #e2ebff 0, #f3f6fc 40%, #f9fafb 100%);
-        min-height: 100vh;
-        font-family: "Tajawal", sans-serif;
-    }
-
-    .profile-shell {
-        max-width: 1150px;
-        margin: 0 auto;
-        padding: 0 20px;
-        display: grid;
-        grid-template-columns: minmax(0, 320px) minmax(0, 1fr);
-        gap: 28px;
-        align-items: flex-start;
-    }
-
-    /* LEFT PANEL (USER CARD) */
-    .profile-side {
-        background: var(--card-bg);
-        border-radius: var(--radius-lg);
-        box-shadow: var(--shadow-soft);
-        padding: 32px 26px;
-        border: 1px solid var(--border-soft);
-        text-align: center;
-    }
-
-    .profile-avatar,
-    .avatar-placeholder {
-        width: 120px;
-        height: 120px;
-        border-radius: 50%;
-        object-fit: cover;
-        margin: 0 auto 18px;
-        border: 4px solid #ffffff;
-        box-shadow: 0 10px 30px rgba(15, 23, 42, 0.18);
-        background: #eef2ff;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 3.2rem;
-        font-weight: 800;
-        color: var(--blue);
-    }
-
-    .profile-name {
-        font-size: 1.9rem;
-        font-weight: 800;
-        color: var(--text-main);
-        margin-bottom: 4px;
-    }
-
-    .profile-email {
-        font-size: 1.2rem;
-        color: var(--text-muted);
-        word-break: break-all;
-        margin-bottom: 14px;
-    }
-
-    .role-chip {
-        display: inline-flex;
-        align-items: center;
-        gap: 8px;
-        padding: 8px 18px;
-        border-radius: 999px;
-        background: var(--blue-soft);
-        color: var(--blue);
-        font-size: 1.15rem;
-        font-weight: 600;
-        margin-bottom: 18px;
-    }
-    .role-chip i { font-size: 1.1rem; }
-
-    .meta-list {
-        margin-top: 10px;
-        padding-top: 14px;
-        border-top: 1px dashed var(--border-soft);
-        text-align: start;
-        font-size: 1.25rem;
-        color: var(--text-muted);
-    }
-    .meta-row {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding: 7px 4px;
-    }
-    .meta-row span:first-child {
-        color: var(--text-muted);
-    }
-    .meta-row span:last-child {
-        font-weight: 600;
-        color: var(--text-main);
-    }
-
-    .edit-btn {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        gap: 8px;
-        padding: 12px 26px;
-        margin-top: 20px;
-        background: var(--blue);
-        color: #fff;
-        text-decoration: none;
-        border-radius: 999px;
-        font-size: 1.3rem;
-        font-weight: 700;
-        box-shadow: 0 14px 30px rgba(13,110,253,0.3);
-        transition: 0.25s;
-    }
-    .edit-btn i { font-size: 1.2rem; }
-    .edit-btn:hover {
-        transform: translateY(-3px);
-        background: #0b5ed7;
-    }
-
-    /* RIGHT SIDE (CONTENT) */
-    .profile-main {
-        display: flex;
-        flex-direction: column;
-        gap: 24px;
-    }
-
-    .card-block {
-        background: var(--card-bg);
-        border-radius: var(--radius-lg);
-        box-shadow: var(--shadow-soft);
-        padding: 26px 28px 30px;
-        border: 1px solid var(--border-soft);
-    }
-
-    .card-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: baseline;
-        margin-bottom: 18px;
-    }
-    .card-title {
-        font-size: 1.8rem;
-        font-weight: 800;
-        color: var(--text-main);
-    }
-    .card-subtitle {
-        font-size: 1.2rem;
-        color: var(--text-muted);
-    }
-
-    /* STATS GRID */
-    .stats-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-        gap: 18px;
-        margin-top: 10px;
-    }
-    .stat-chip {
-        border-radius: 18px;
-        padding: 16px 18px;
-        background: #f7f9fe;
-        border: 1px solid #e2e8f0;
-        display: flex;
-        flex-direction: column;
-        gap: 4px;
-    }
-    .stat-label {
-        font-size: 1.2rem;
-        color: var(--text-muted);
-        display: flex;
-        align-items: center;
-        gap: 6px;
-    }
-    .stat-label i {
-        font-size: 1.15rem;
-        color: var(--blue);
-    }
-    .stat-value {
-        font-size: 1.8rem;
-        font-weight: 800;
-        color: var(--text-main);
-    }
-
-    /* INFO LIST */
-    .info-list {
-        display: grid;
-        grid-template-columns: 1fr;
-        gap: 10px;
-        margin-top: 10px;
-    }
-    .info-row {
-        display: flex;
-        align-items: center;
-        gap: 14px;
-        padding: 12px 10px;
-        border-radius: 14px;
-        background: #f8fafc;
-    }
-    .info-icon {
-        width: 36px;
-        height: 36px;
-        border-radius: 50%;
-        background: var(--blue-soft);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        color: var(--blue);
-        font-size: 1.25rem;
-    }
-    .info-text {
-        display: flex;
-        flex-direction: column;
-        gap: 2px;
-    }
-    .info-label {
-        font-size: 1.2rem;
-        color: var(--text-muted);
-    }
-    .info-value {
-        font-size: 1.35rem;
-        font-weight: 600;
-        color: var(--text-main);
-        word-break: break-word;
-    }
-
-    @media (max-width: 900px) {
-        .profile-shell {
-            grid-template-columns: minmax(0,1fr);
-        }
-    }
-</style>
-{% endblock %}
-
-{% block content %}
-
-<section class="profile-page">
-    <div class="profile-shell">
-
-        <!-- اللوحة الجانبية -->
-        <aside class="profile-side">
+          <div class="profile-image">
+            {# صورة البروفايل أو الحرف الأول من اليوزر #}
             {% if user.profile.avatar %}
                 <img src="{{ user.profile.avatar.url }}" alt="الصورة الشخصية" class="profile-avatar">
             {% else %}
@@ -263,159 +33,191 @@
                     {{ user.username.0|upper }}
                 </div>
             {% endif %}
+          </div>
 
-            <div class="profile-name">
-                {{ user.get_full_name|default:user.username }}
-            </div>
+          <h1 class="profile-name">
+            {{ user.get_full_name|default:user.username }}
+          </h1>
 
-            <div class="profile-email">
-                {{ user.email }}
-            </div>
+          <p class="profile-title">
+            {% if user.profile.role == 'OWNER' %}
+                صاحب مشروع
+            {% else %}
+                مستثمر
+            {% endif %}
+          </p>
 
-            <div class="role-chip">
-                <i class="fas fa-user-tie"></i>
-                {% if user.profile.role == 'OWNER' %}
-                    صاحب مشروع
-                {% else %}
-                    مستثمر
-                {% endif %}
-            </div>
+          <div class="profile-actions">
+            <button class="action-btn share-btn">
+              <i class="fas fa-share-alt"></i>
+              مشاركة رابط الملف التعريفي
+            </button>
+          </div>
 
-            <div class="meta-list">
-                <div class="meta-row">
-                    <span>تاريخ الانضمام</span>
-                    <span>{{ user.date_joined|date:"d M Y" }}</span>
-                </div>
-                <div class="meta-row">
-                    <span>المشاريع</span>
-                    <span>{{ user.projects_owned.count }}</span>
-                </div>
-                <div class="meta-row">
-                    <span>الاستثمارات</span>
-                    <span>{{ user.investments.count }}</span>
-                </div>
-            </div>
+        </div>
 
-            <a href="{% url 'accounts:profile_edit' %}" class="edit-btn">
-                <i class="fas fa-pen"></i>
-                تعديل الملف الشخصي
-            </a>
-        </aside>
-
-        <!-- المحتوى الرئيسي -->
-        <main class="profile-main">
-
-            <!-- كارت الإحصائيات -->
-            <div class="card-block">
-                <div class="card-header">
-                    <div class="card-title">إحصائياتي</div>
-                    <div class="card-subtitle">نظرة سريعة على نشاطك داخل المنصة</div>
-                </div>
-
-                <div class="stats-grid">
-                    <div class="stat-chip">
-                        <div class="stat-label">
-                            <i class="fas fa-coins"></i>
-                            الاستثمارات النشطة
-                        </div>
-                        <div class="stat-value">
-                            {{ user.investments.count }}
-                        </div>
-                    </div>
-
-                    <div class="stat-chip">
-                        <div class="stat-label">
-                            <i class="fas fa-chart-line"></i>
-                            إجمالي الاستثمار
-                        </div>
-                        <div class="stat-value">
-                            ₪{{ total_invested|default:"0" }}
-                        </div>
-                    </div>
-
-                    <div class="stat-chip">
-                        <div class="stat-label">
-                            <i class="fas fa-trophy"></i>
-                            مشاريع أطلقتها
-                        </div>
-                        <div class="stat-value">
-                            {{ user.projects_owned.count }}
-                        </div>
-                    </div>
-
-                    <div class="stat-chip">
-                        <div class="stat-label">
-                            <i class="fas fa-user-clock"></i>
-                            مدة العضوية
-                        </div>
-                        <div class="stat-value">
-                            {{ user.date_joined|date:"Y" }}
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- كارت المعلومات الشخصية -->
-            <div class="card-block">
-                <div class="card-header">
-                    <div class="card-title">معلوماتي الشخصية</div>
-                    <div class="card-subtitle">بيانات يمكن تحديثها من صفحة تعديل الملف الشخصي</div>
-                </div>
-
-                <div class="info-list">
-                    <div class="info-row">
-                        <div class="info-icon">
-                            <i class="fas fa-user"></i>
-                        </div>
-                        <div class="info-text">
-                            <span class="info-label">الاسم الكامل</span>
-                            <span class="info-value">
-                                {{ user.get_full_name|default:"غير محدد" }}
-                            </span>
-                        </div>
-                    </div>
-
-                    <div class="info-row">
-                        <div class="info-icon">
-                            <i class="fas fa-envelope"></i>
-                        </div>
-                        <div class="info-text">
-                            <span class="info-label">البريد الإلكتروني</span>
-                            <span class="info-value">
-                                {{ user.email }}
-                            </span>
-                        </div>
-                    </div>
-
-                    <div class="info-row">
-                        <div class="info-icon">
-                            <i class="fas fa-phone"></i>
-                        </div>
-                        <div class="info-text">
-                            <span class="info-label">رقم الجوال</span>
-                            <span class="info-value">
-                                {{ user.profile.phone|default:"غير محدد" }}
-                            </span>
-                        </div>
-                    </div>
-
-                    <div class="info-row">
-                        <div class="info-icon">
-                            <i class="fas fa-map-marker-alt"></i>
-                        </div>
-                        <div class="info-text">
-                            <span class="info-label">المدينة</span>
-                            <span class="info-value">
-                                {{ user.profile.city|default:"غير محدد" }}
-                            </span>
-                        </div>
-                    </div>
-                </div>
-
-            </div>
-
-        </main>
+        <div class="contact-info">
+          <h3>معلومات شخصية</h3>
+          <div class="contact-item">
+            <a href="#" class="tab-link active" data-tab="profile">الملف الشخصي</a>
+          </div>
+          <div class="contact-item">
+<a href="{% url 'projects:list' %}" class="tab-link">المشاريع الخاصة</a>
+          </div>
+          <div class="contact-item">
+<a 
+  href="{% if user.profile.role == 'OWNER' %}
+           /accounts/owner/
+         {% else %}
+           /accounts/investor/
+         {% endif %}"
+  class="tab-link"
+>
+  لوحة التحكم
+</a>          </div>
+          <div class="contact-item">
+          </div>
+        </div>
+      </aside>
     </div>
-</section>
 
-{% endblock %}
+    <div class="main-container">
+      <main class="main-content">
+    
+        <header id="headers" class="headers">
+          <div class="nav container" >
+            <div class="logo">
+              <a href="{%url 'home'%}">
+                <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 30 30" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-trending-up h-7 w-7 text-white" ><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"></polyline><polyline points="16 7 22 7 22 13"></polyline></svg>
+              </a>
+              <h3>سهمي</h3>
+            </div>  
+            <i class="fa-solid fa-bars" id="menu-icon"></i>
+
+            <div class="nav-links">
+              <a href="/" class="nav-link">الرئيسية</a>
+              <a href="{% url 'home' %}#about">من نحن</a>
+              <a href="{% url 'projects:list' %}" class="nav-link">المشاريع</a>
+              <a href="#footer" class="nav-link">تواصل معنا</a>
+            </div>
+
+            <div class="nav-btn">
+              {% if user.is_authenticated %}
+                  {% comment %} <button class="btn-2">
+    <a href="/accounts/profile/">الملف الشخصي</a>
+                  </button> {% endcomment %}
+
+                  <button class="btn-1">
+                      <a href="{% url 'accounts:logout' %}?next=/">تسجيل خروج</a>
+                  </button>
+              {% else %}
+                  <button class="btn-1">
+                      <a href="{% url 'accounts:login' %}">تسجيل الدخول</a>
+                  </button>
+
+                  <button class="btn-2">
+                      <a href="{% url 'accounts:register' %}">إنشاء حساب</a>
+                  </button>
+              {% endif %}
+            </div>
+
+          </div>
+        </header>
+        <!--profile info  sec -->
+    
+        <section id="profile" class="content-section active">
+          <h2 class="section-title">الملف الشخصي</h2>
+          
+          <form class="profile-form" method="post">
+            {% csrf_token %}
+            
+            <div class="form-group">
+              <label for="fullName">الاسم الكامل</label>
+              <input 
+                type="text" 
+                id="fullName" 
+                name="full_name"
+                class="form-control" 
+                value="{{ user.get_full_name|default:user.username }}"
+              >
+            </div>
+            
+            <div class="form-group">
+              <label for="email">البريد الإلكتروني</label>
+              <input 
+                type="email" 
+                id="email" 
+                name="email"
+                class="form-control" 
+                value="{{ user.email }}"
+              >
+            </div>
+            
+            <div class="form-group">
+              <label for="phone">رقم الهاتف</label>
+              <input 
+                type="tel" 
+                id="phone" 
+                name="phone"
+                class="form-control" 
+                value="{{ user.profile.phone|default_if_none:'' }}"
+              >
+            </div>
+            
+            <div class="form-group">
+              <label for="jobTitle">المسمى الوظيفي</label>
+              <input 
+                type="text" 
+                id="jobTitle" 
+                name="job_title"
+                class="form-control" 
+                value="{{ user.profile.job_title|default_if_none:'' }}"
+              >
+            </div>
+            
+            <div class="form-group full-width">
+              <label for="bio">نبذة عني</label>
+              <textarea 
+                id="bio" 
+                name="bio"
+                class="form-control" 
+                rows="4"
+              >{{ user.profile.bio|default_if_none:'' }}</textarea>
+            </div>
+            
+            <div class="form-group full-width">
+              <label for="skills">المهارات</label>
+              <input 
+                type="text" 
+                id="skills" 
+                name="skills"
+                class="form-control" 
+                value="{{ user.profile.skills|default_if_none:'' }}"
+              >
+            </div>
+            
+            <div class="form-group full-width">
+              <button type="submit" class="btn">حفظ التغييرات</button>
+            </div>
+          </form>
+        </section>
+        <!-- end profile info -->
+
+
+        <!-- sec project / dashboard --> 
+        <section id="dashboard" class="content-section">
+          <!-- ADD BUTTON -->
+          <div style="text-align:center; margin-top:60px;">
+              <a href="#" class="btn-add">أضف مشروع جديد</a>
+          </div>
+
+        </section>
+     
+      </main>
+    </div>
+   
+
+    <script src="js/script.js"></script>
+
+  </body>
+</html>

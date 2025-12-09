@@ -14,12 +14,13 @@ from .forms import ProfileUpdateForm
 # ====================== التسجيل والدخول ======================
 def register_view(request):
     if request.method == "POST":
-        form = RegisterForm(request.POST)
+        form = RegisterForm(request.POST, request.FILES)
         if form.is_valid():
             username = form.cleaned_data['username']
             email = form.cleaned_data['email']
             password = form.cleaned_data['password1']
             role = form.cleaned_data['role']
+            avatar = request.FILES.get('avatar')
 
     # نعمل المستخدم
             user = User.objects.create_user(username=username, email=email, password=password)
@@ -27,7 +28,10 @@ def register_view(request):
     # نعمل البروفايل بطريقة آمنة (ما تطلع أبدًا UNIQUE error)
             Profile.objects.update_or_create(
                 user=user,
-                defaults={'role': role}
+                defaults={'role': role,
+                'avatar': avatar  # 👈 هي المهمة
+}
+
             )
 
             messages.success(request, "تم إنشاء الحساب بنجاح، يمكنك تسجيل الدخول الآن.")
